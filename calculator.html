@@ -109,12 +109,13 @@
         let operator = null;
         let operand = null;
 
-        const updateDisplay = () => {
-            display.value = current;
+        const log = (msg, data) => {
+            console.log(`[Калькулятор] ${msg}`, data ?? '');
         };
 
-        const logInput = (label, value) => {
-            console.log(label, value);
+        const updateDisplay = () => {
+            display.value = current;
+            log('Экран', current);
         };
 
         const setInput = (value) => {
@@ -126,7 +127,7 @@
                 current += value;
             }
             updateDisplay();
-            logInput('Ввод', current);
+            log('Ввод', current);
         };
 
         const setOperator = (op) => {
@@ -136,7 +137,7 @@
             operator = op;
             operand = parseFloat(current);
             current = '0';
-            logInput('Операция', op);
+            log('Операция', op);
         };
 
         const compute = () => {
@@ -144,6 +145,7 @@
                 return;
             }
             const right = parseFloat(current);
+            log('Вычисление', { left: operand, op: operator, right });
             let result = operand;
             switch (operator) {
                 case 'add':
@@ -165,7 +167,7 @@
             operator = null;
             operand = null;
             updateDisplay();
-            logInput('Результат', current);
+            log('Результат', current);
         };
 
         keys.addEventListener('click', (event) => {
@@ -192,10 +194,12 @@
                     operator = null;
                     operand = null;
                     updateDisplay();
+                    log('Сброс');
                     break;
                 case 'backspace':
                     current = current.length > 1 ? current.slice(0, -1) : '0';
                     updateDisplay();
+                    log('Удаление', current);
                     break;
                 case 'add':
                 case 'subtract':
